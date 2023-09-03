@@ -1,0 +1,38 @@
+
+{% extends 'encounterapp/search/search_user_base.html' %}
+
+{% block content %}
+
+
+{% for user in results %}
+<div class="user-wrap">
+  <img
+  width="40px"
+  height="40px"
+  alt="post-img"
+  style="border-radius: 20%;"
+  src="/media/{{user.image}}"
+  class="logo__img"
+/>
+<div class="user-container">
+{{user.firstname}}
+{{user.lastname}}
+<div class="details">
+  <a class="link__details" href="{% url 'encounterapp:user_details' user.id access_token %}">Expand</a>
+</div>
+</div>
+</div>
+{% endfor%}
+
+<!-- ==================== -->
+
+{% if page_obj.has_next %}
+<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+{% endif %}
+<div class="d-flex justify-content-center" style="display:none;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+ </div> 
+
+ {% endblock %}

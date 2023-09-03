@@ -1,0 +1,37 @@
+{% extends 'encounterapp/search/user_details_base.html' %}
+{{ access_token|json_script:"access_token" }}
+{% block content %}
+
+<div class="user_details-wrap">
+  <div class="image_wrap">
+    <img
+    width="80px"
+    height="80px"
+    alt="user-img"
+    style="border-radius: 20%;"
+    src="/media/{{image}}"
+    class="logo__img"
+  />
+  </div>
+
+<div class="user_detail-container">
+  <div>{{firstname}} {{lastname}}</div>
+<div>{{email}}</div>
+<div>{{phoneno}}</div>
+<div>{{profession}}</div>
+</div>
+<div class="chat">
+  <a class="link__item" href="{% url 'encounterapp:instant-chat' userID|add:user_id user_id access_token %}">Chat</a>
+ </div>
+</div>
+<div style="display:none;">
+{% if page_obj.has_next %}
+<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+{% endif %}
+<div class="d-flex justify-content-center" style="display:none;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+ </div> 
+</div>
+{% endblock %}
