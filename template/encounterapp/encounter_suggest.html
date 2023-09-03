@@ -1,0 +1,30 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'follow/follow.css' %}"> 
+</head>
+<body>
+  <div class="dashbaord">
+    <a class="link__item" href="{% url 'encounterapp:dashbaord' access_token %}">Dashbaord</a>
+   </div>
+   <form id="user-form">
+    {% csrf_token %}
+    <label for="user-id">User ID:</label>
+    <input type="text" id="user-id" name="user_id">
+    <button type="submit">Submit</button>
+</form>
+{{recommendations}}
+<ul id="recommendations-list">
+    <!-- Recommendations will be populated here -->
+</ul>
+{{access_token|json_script:"access_token" }}
+
+<script src="{% static 'encounterapp/encounterSuggest.js' %}"></script>  
+</body>
+</html>

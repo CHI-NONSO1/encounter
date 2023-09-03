@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>Lender Borrower</title>
+    <link rel="stylesheet" href="{% static 'follow/follow.css' %}"> 
+</head>
+<body>
+  <div class="dashbaord">
+    <a class="link__item" href="{% url 'encounterapp:dashbaord' access_token %}">Dashbaord</a>
+   </div>
+    <h1>Recommendations</h1>
+    <form id="ratings-form">
+        <label for="rating-lender1">Lender A:</label>
+        <input type="number" id="rating-lender1" name="rating-lender1" step="0.1" min="0" max="5"><br>
+
+        <label for="rating-lender2">Lender B:</label>
+        <input type="number" id="rating-lender2" name="rating-lender2" step="0.1" min="0" max="5"><br>
+
+        <label for="rating-lender3">Lender C:</label>
+        <input type="number" id="rating-lender3" name="rating-lender3" step="0.1" min="0" max="5"><br>
+
+        <button type="button" id="submit-button">Get Recommendations</button>
+    </form>
+
+    <div id="user_recommend">
+      <!-- Recommendations will be displayed here -->
+  </div>
+
+    <div id="recommendations">
+        <!-- Recommendations will be displayed here -->
+    </div>
+    {{access_token|json_script:"access_token" }}
+    <script src="{% static 'encounterapp/lender_borrower.js' %}"></script> 
+    <script>
+
+    </script>
+</body>
+</html>

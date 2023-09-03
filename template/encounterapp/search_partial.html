@@ -1,0 +1,54 @@
+
+{% extends 'encounterapp/search.html' %}
+
+{% block content %}
+
+{% for post in results %}
+
+<div class="post-wrap">
+  {% if post.post_image %}
+  <img
+  width="40px"
+  height="40px"
+  alt="post-img"
+  style="border-radius: 20%;"
+  src="/media/{{post.image}}"
+  class="logo__img"
+/>
+{% endif %}
+{% if post.post_video %}
+  <video id="video" class="video-player" preload="auto" >
+    <source id="videosrc" src="/media/{{ post.video }}" type="video/mp4" />
+    
+    <track
+      label="English"
+      kind="captions"
+      srclang="en"
+      src="/media/{{ post.image }}"
+      default
+    />
+    Your browser does not support the video tag.
+  </video>
+  {% endif %}
+  <div class="post-container">
+{{post.title}}
+{{post.content}}
+<div class="details">
+  <a class="link__details" href="{% url 'encounterapp:post_details' post.id access_token %}">Expand</a>
+</div>
+</div>
+</div>
+{% endfor %}
+
+<!-- ==================== -->
+
+{% if page_obj.has_next %}
+<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+{% endif %}
+<div class="d-flex justify-content-center" style="display:none;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+ </div> 
+
+ {% endblock %}

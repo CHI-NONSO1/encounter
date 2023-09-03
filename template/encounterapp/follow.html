@@ -1,0 +1,89 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'follow/follow.css' %}"> 
+</head>
+<body>
+  <div class="dashbaord">
+    <a class="link__item" href="{% url 'encounterapp:dashboard' access_token %}">Dashboard</a>
+   </div>
+
+   <div class="dashbaord">
+    <a class="link__item" href="{% url 'encounterapp:suggest' access_token %}">Get Suggestions</a>
+   </div>
+   <div class="lender_borrower">
+    <a class="link__item" href="{% url 'encounterapp:lender_borrower' access_token %}">Get Lender</a>
+   </div>
+   <div  class="follow__form-main">
+   {% for notify in notificate %}
+   <div class="connect__form">    
+    <div  >
+    <img
+    width="40px"
+    height="40px"
+    alt="user-img"
+    src="/media/{{notify.sender.image}}"
+    class="logo__img"
+  />
+  {{notify.sender.firstname}} {{notify.sender.lastname}} is following you
+</div>
+<div>
+<form
+method="POST"
+action="{% url 'encounterapp:follow' access_token %}"
+>
+{% csrf_token %}
+<input type="hidden" name="user_id" value="{{notify.sender.id}}" />
+<div class="connect_btn">
+  <button type="submit" class="connect-button">Connect</button>
+</div>
+</form>
+</div>
+  </div>
+   {%endfor%}
+
+   {%if users %}
+  {%for user in users %}
+  <div class="follow_wrapper">
+    <div class="follow_form">
+      <img
+      width="40px"
+      height="40px"
+      alt="user-img"
+      src="/media/{{user.image}}"
+      class="logo__img"
+    />
+    <div>{{user.firstname}} {{user.lastname}} </div>
+  </div>
+  <div>
+      <form
+        method="POST"
+        action="{% url 'encounterapp:follow' access_token %}"
+      >
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{user.id}}" />
+        <div class="connect_btn">
+          <button type="submit" class="connect-button">Connect</button>
+        </div>
+      </form>
+      </div>
+    </div>
+    
+    {%endfor%}
+    {%else%}
+    <div>No More Suggestions</div>
+    {%endif%}
+   
+
+    <!--  -->
+    
+      </div>
+    
+</body>
+</html>

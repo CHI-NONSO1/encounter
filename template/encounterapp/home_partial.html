@@ -1,0 +1,435 @@
+{% load custom_filters %}
+{{access_token|json_script:"access_token" }}
+{{userID|json_script:"userID" }}
+{{firstname|json_script:"firstname" }}
+{{lastname|json_script:"lastname" }}
+{{img|json_script:"img" }}
+<div class="post_form">
+  <form  action= "{% url 'encounterapp:post' access_token  %}" method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="error">
+        {%  if error %}
+        <p>
+          <strong class="error_message">
+          {{ error }}
+        </strong>
+        </p>
+    
+        {% endif %}
+      </div>
+
+  <!-- ----------------------------------------------------- -->
+<div style="display: flex; align-items: center;" class="make_post">
+  <div  class="user_image_parent" >
+  <img
+
+  alt="author-img"
+
+  src="/media/{{img}}"
+  class="logo__img"
+/>
+</div>
+<div class="container">
+  <input type="text" style="width: 90%; outline: none; border: none; margin-bottom: .6%; display: none;" name="hashtags" placeholder="You can enter hashtags here separated by commas" id="hashtag_iput">
+  <div class="textarea-container">
+<textarea id="textArea" name="content" rows="2" cols="60" placeholder="Share Your Idea"></textarea>
+<button class="post_btn" id="sendButton" disabled>Send</button>
+
+
+</div>
+</div>
+<!-- --------------------------------------------------------------------- -->
+</div>
+<div class="show_hide_group">
+
+<div id="select_groups"></div>
+
+  <label for="video-file-input" class="custom-video-upload">
+    <input id="video-file-input" type="file" name='video'>
+  </label>
+
+  <label for="image-file-input" class="custom-image-upload">
+    <input id="image-file-input" type="file" name='image'>
+  </label>
+    
+</div>
+<div class="select--option" style="display: none;">
+  {% if groups%}
+  {%for group in groups%}
+  
+  <input type="checkbox" class="grouppost" id="group_post" name="groups"  value="{{group.group_name}}" >{{group.group_name}} 
+    {%endfor%}
+    
+  {%endif%}
+</div>
+<div class="img_parent" style="display: none;">
+  <img
+  class="img_content"
+  id="imagePreview" 
+  src="" 
+  alt="Image Preview"
+>
+  </div>
+  <div class="video_prev_parent" style="display: none;">
+    <video id="video" class="video-player" preload="auto" >
+      <source id="videosrc" src="" type="video/mp4" />
+      
+      <track
+        label="English"
+        kind="captions"
+        srclang="en"
+        src=""
+        default
+      />
+      Your browser does not support the video tag.
+    </video>
+    </div>
+  </form>
+</div>
+<!-- ============================= -->
+
+{% for post in items %}
+    {% if post|get_model_name == "EncaPost" %}
+    <!-- =======Main Post Starts Here============= -->
+    <div class="post_details-wrap">
+      <div data-share-id="{{post.id}}" class="share_post_parent">
+    
+        <form  action= "{% url 'encounterapp:share' post.id access_token  %}" method = "post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="text" style="width: 90%; outline: none; border: none; margin-bottom: .6%;" name="hashtags" placeholder="You can enter hashtags here separated by commas" id="hashtag_iput">
+          <textarea name="message" style="outline: none; border: none; margin-top:2%;" class="share__post" rows="2" cols="60" placeholder="Add a message (optional)"></textarea><br>
+          <input type="hidden" name="post_id" value="{{post.id}}">
+          <button type="submit">Share</button>
+        </form>
+      </div>
+      <div class="author_details"> 
+        <div class="author_image_wrap">
+          <img
+          alt="author-img"
+          src="/media/{{post.user.image}}"
+          class="logo__img"
+        />
+        </div>
+        <div>
+          <div>By {{post.user.firstname}}{{" "}}{{post.user.lastname}}</div>
+          <div>On {{post.timestamp}}</div>
+        </div>
+       
+        
+      </div>
+      <div class='post_content'>
+        {% if post.hashtags %}
+        {% for hashtag in post.hashtags.all %}
+        <a href="{% url 'encounterapp:hashtag_posts' hashtag.name access_token %}">#{{ hashtag.name }}</a>
+    {% endfor %}
+        {% endif %}
+      {% if post.image %}
+      <div class="post_image_wrap">
+        <img
+     
+        alt="post-img"
+    
+        src="/media/{{post.image}}"
+        class="post__img"
+      />
+      </div>
+      {% endif %}
+      {% if post.video %}
+      <video id="video" class="video-player" preload="auto" >
+        <source id="videosrc" src="{{ post.video.url }}" type="video/mp4" />
+        
+        <track
+          label="English"
+          kind="captions"
+          srclang="en"
+          src="{{ post.video.url }}"
+          default
+        />
+        Your browser does not support the video tag.
+      </video>
+      {% endif %}
+    
+    <div class="post_detail-container">
+      <div   class="post_content_container">
+        <p class="shorten_text" data-showmore-id="{{post.id}}">{{post.content}}</p>
+        <button class="show_more_btn" data-show-id="{{post.id}}">Show more</button>
+      </div>
+    </div>
+    </div>
+    <div class="like-comment-share">
+      <div class="reaction_button">
+      <span data-likepost-id="{{post.id}}">{{ post.total_likes }}</span>
+      <button type="submit" data-user-id="{{userID}}" data-post-id="{{post.id}}" class="like-button"> &#x1F49C;</button>
+    </div>
+          
+        
+    <div class="reaction_button">
+      <span data-item-id="{{post.id}}" >{{post.comments.count}}</span>
+      <button class="show_hide-commentbox" data-shareitem-id=""  data-user-id="{{userID}}"  data-item-id="{{post.id}}">Comments</button>
+      </div>
+      <div class="reaction_button">
+        <span data-item-id="{{post.id}}" >{{post.total_shared}}</span>
+      <button type="submit" class="share_post" data-user-id="{{userID}}" data-post-id="{{post.id}}">Share</button>
+      </div>
+      
+    </div>
+    <!-- Post Reactions -->
+    
+    <div class="reaction-card">
+      <div id="commentForm" style="display: none;" data-item-id="{{post.id}}"  class="commentbox">
+        <!-- ===============Comment Start================= -->
+          
+      <div class="comment_reply"  data-id="{{post.id}}">
+        <!-- Comments -->
+        
+        {% for comment in post.comments.all %}
+     
+      {% if comment.parent == None %}
+    
+    
+       
+     
+      
+      
+        <!-- ====Remove From Here==== -->
+        {% endif %}
+        
+        <!-- ================================= -->
+        {% endfor %}
+      </div>
+     
+        <!-- ============Comment End==================== -->
+        <div class="comment__box-input">
+          <div class="author_image_wrap">
+          <img
+            style="border-radius: 50%;"
+            alt="user-img"
+            src="/media/{{img}}"
+            class="logo__img"
+          />
+        </div>
+       
+      <form
+     class="comment__form"
+      method="POST" 
+      action=""
+      >
+        {% csrf_token %}
+        
+        <textarea class="comment-text"  name="comment" rows="2" cols="30" placeholder="Post a comment"></textarea>
+        
+        <input type="hidden" name="user" value="{{userID}}">
+        <input type="hidden" name="firstname" value="{{firstname}}">
+        <input type="hidden" name="lastname" value="{{lastname}}">
+        <input type="hidden" name="image" value="{{img}}">
+        <input type="hidden" name="post_id" value="{{post.id}}">
+        <input type="hidden" name="parent_id" value="{{comment.id}}">
+        
+        <button type="submit" class="addcomment">Comment</button>
+      </form>
+    </div>
+    
+    
+    </div>
+    <!-- ================ -->
+    
+    
+    </div>
+    <!--  -->
+    </div>
+        <!-- =======Main Post Stops Here============= -->
+        <!-- =======SharedPost Starts Here============= -->
+    {% elif post|get_model_name == "SharedPost" %}
+    <div class="post_details-wrap">
+      <div data-share-id="{{post.id}}" class="share_post_parent">
+      
+        <form  action= "{% url 'encounterapp:share' post.post.id access_token  %}" method = "post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="text" style="width: 90%; outline: none; border: none; margin-bottom: .6%;" name="hashtags" placeholder="You can enter hashtags here separated by commas" id="hashtag_iput">
+          <textarea name="message" style="outline: none; border: none; margin-top:2%;" class="share__post" rows="2" cols="60" placeholder="Add a message (optional)"></textarea><br>
+          <input type="hidden" name="post_id" value="{{post.id}}">
+          <button type="submit">Share</button>
+        </form>
+      </div>
+
+      <div class="author_details"> 
+        <div class="author_image_wrap">
+          <img
+          alt="author-img"
+          src="/media/{{post.name.image}}"
+          class="logo__img"
+        />
+        </div>
+        <div>
+          <div> Shared By {{post.name.firstname}} {{post.name.lastname}}</div>
+          <div>On {{post.timestamp}}</div>
+        </div>
+       
+        
+      </div>
+      <div>
+        {% if post.hashtags %}
+      {% for hashtag in post.hashtags.all %}
+      <a href="{% url 'encounterapp:hashtag_posts' hashtag.name access_token %}">#{{ hashtag.name }}</a>
+      {% endfor %}
+      {% endif %}
+      </div>
+      <div>{{post.message}}</div>
+      
+      
+      <hr />
+      <div class="original_post_details-wrap">
+
+        <div class="author_details"> 
+          <div class="author_image_wrap">
+            <img
+            alt="author-img"
+            src="/media/{{post.post.user.image}}"
+            class="logo__img"
+          />
+          </div>
+          <div>
+            <div>By {{post.post.user.firstname}}{{" "}}{{post.post.user.lastname}}</div>
+            <div>On {{post.post.timestamp}}</div>
+          </div>
+         
+          
+        </div>
+        <div class='post_content'>
+          {% if post.post.hashtags %}
+          {% for hashtag in post.post.hashtags.all %}
+          <a href="{% url 'encounterapp:hashtag_posts' hashtag.name access_token %}">#{{ hashtag.name }}</a>
+      {% endfor %}
+          {% endif %}
+        {% if post.post.image %}
+        <div class="post_image_wrap">
+          <img
+       
+          alt="post-img"
+      
+          src="/media/{{post.post.image}}"
+          class="post__img"
+        />
+        </div>
+        {% endif %}
+        {% if post.post.video %}
+        <video id="video" class="video-player" preload="auto" >
+          <source id="videosrc" src="{{ post.post.video.url }}" type="video/mp4" />
+          
+          <track
+            label="English"
+            kind="captions"
+            srclang="en"
+            src="{{ post.post.video.url }}"
+            default
+          />
+          Your browser does not support the video tag.
+        </video>
+        {% endif %}
+      
+      <div class="post_detail-container">
+        <div   class="post_content_container">
+          <p class="shorten_text" data-showmore-id="{{post.post.id}}">{{post.post.content}}</p>
+          <button class="show_more_btn" data-show-id="{{post.id}}">Show more</button>
+        </div>
+      </div>
+      </div>
+      <div class="like-comment-share">
+        <div class="reaction_button">
+        <span data-likepost-id="{{post.id}}">{{ post.total_likes }}</span>
+        <button type="submit" data-user-id="{{userID}}" data-post-id="{{post.id}}" class="like-button"> &#x1F49C;</button>
+      </div>
+            
+          
+      <div class="reaction_button">
+        <span data-item-id="{{post.id}}" >{{post.shared_post_comments.count}}</span>
+        <button class="show_hide-commentbox" data-user-id="{{userID}}" data-shareitem-id="{{post.id}}" data-item-id="">Comments</button>
+        </div>
+        <div class="reaction_button">
+          <span data-item-id="{{post.id}}" >{{post.total_shared}}</span>
+        <button type="submit" class="share_post" data-user-id="{{userID}}" data-post-id="{{post.id}}">Share</button>
+        </div>
+        
+      </div>
+      <!-- Post Reactions -->
+      
+      <div class="reaction-card">
+        <div id="commentForm" style="display: none;" data-shareitem-id="{{post.id}}"  class="commentbox">
+          <!-- ===============Comment Start================= -->
+            
+        <div class="comment_reply" data-sharedpost-id="{{post.id}}">
+          <!-- Comments -->
+          
+          {% for comment in post.shared_post_comments.all %}
+       
+        {% if comment.parent == None %}
+      
+      
+         
+       
+        
+        
+          <!-- ====Remove From Here==== -->
+          {% endif %}
+          
+          <!-- ================================= -->
+          {% endfor %}
+        </div>
+       
+          <!-- ============Comment End==================== -->
+          <div class="comment__box-input">
+            <div class="author_image_wrap">
+            <img
+             
+              style="border-radius: 50%;"
+              alt="user-img"
+              src="/media/{{img}}"
+              class="logo__img"
+            />
+          </div>
+         
+        <form
+       class="comment__form"
+        method="POST" 
+        action=""
+        >
+          {% csrf_token %}
+          
+          <textarea class="comment-text"  name="comment" rows="2" cols="30" placeholder="Post a comment"></textarea>
+          
+          <input type="hidden" name="user" value="{{userID}}">
+          <input type="hidden" name="firstname" value="{{firstname}}">
+          <input type="hidden" name="lastname" value="{{lastname}}">
+          <input type="hidden" name="image" value="{{img}}">
+          <input type="hidden" name="shared_post_id" value="{{post.id}}">
+          <input type="hidden" name="parent_id" value="{{comment.id}}">
+          
+          <button type="submit" class="addcomment">Comment</button>
+        </form>
+      </div>
+      
+      
+      </div>
+      <!-- ================ -->
+      
+      
+      </div>
+      <!--  -->
+      </div>
+      
+      </div>
+         <!-- =======SharedPost Stops Here============= -->
+    {% endif %}
+{% endfor %}
+
+
+
+{% if page_obj.has_next %}
+<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+{% endif %}
+<div class="d-flex justify-content-center" style="display:none;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+ </div> 
+
