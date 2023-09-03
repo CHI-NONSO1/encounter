@@ -1,0 +1,148 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'user/user-register.css' %}"> 
+</head>
+<body>
+  <div class="admin__form-container">
+
+  
+    <form  action= "{% url 'encounterapp:register'  %}" method = "post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="error">
+          {%  if error_message %}
+          <p>
+            <strong class="error_message">
+            {{ error_message }}
+          </strong>
+          </p>
+          
+          {% endif %}
+        </div>
+
+        <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                placeholder="First Name"
+                class="form-control"
+                required
+                
+                />
+              <label for="firstname" class="labText">First Name</label>
+            </div>
+            <div class="help_parent"><span class="help-block"></span></div>
+          </div>
+  
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="text"
+                id="lastname"
+                name="lastname"
+                placeholder="Last Name"
+                class="form-control"
+                required
+                
+                />
+              <label for="lastname" class="labText">Last Name</label>
+            </div>
+            <div class="help_parent"><span class="help-block"></span></div>
+          </div>
+  
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                autoComplete="none"
+                placeholder="Password"
+                class="form-control"
+                required
+               
+                 />
+              <label for="password" class="labText">Password</label>
+            </div>
+           <input type="checkbox" id="showPassword">Show Password
+          </div>
+  
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                required
+                type="password"
+                name="confirm_password"
+                autoComplete="none"
+                id="confirmpassword"
+                placeholder="Confirm Password"
+                class="form-control"
+                
+              
+                />
+              <label for="confirmpassword" class="labText">Confirm Password</label>
+            </div>
+            <div class="help_parent"><span class="help-block"></span></div>
+          </div>
+  
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                class="form-control"
+                required
+                />
+              <label for="email" class="labText">Email</label>
+            </div>
+            <div class="help_parent"><span class="help-block"></span></div>
+          </div>
+  
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="tel"
+                name="phoneno"
+                id="phoneno"
+                placeholder="Phone Number"
+                class="form-control"
+                required
+               
+                />
+              <label for="phoneno" class="labText">Phone Number</label>
+            </div>
+            <div class="help_parent"><span class="help-block"></span></div>
+          </div>
+  
+    <div class="form-group-parent-file">
+    <div class="fileBtn_parent">
+      <input  type="file" id="imageInput" accept="image/*"> 
+      </div>
+  
+      <div class="img_parent">
+      <img
+      class="img_content"
+      id="imagePreview" 
+      src="" 
+      alt="Image Preview"
+>
+      </div>
+    </div>
+        <div>
+          <button class="submit" type="submit">Register</button>
+        </div>
+    </form>
+  </div>
+  <script src="{% static 'encounterapp/register.js' %}"></script> 
+</body>
+</html>

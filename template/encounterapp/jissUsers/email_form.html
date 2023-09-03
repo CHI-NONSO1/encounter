@@ -1,0 +1,21 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'user/user-login.css' %}"> 
+</head>
+<body>
+  <div class="admin__login--wrapper">
+    {{msg}}
+      </div>
+      <div class="login">
+        <a class="link__item" href="{% url 'encounterapp:login' %}">You can Login</a>
+       </div>
+
+</body>
+</html>

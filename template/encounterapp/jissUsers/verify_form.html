@@ -1,0 +1,51 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'user/user-login.css' %}"> 
+</head>
+<body>
+  <div class="admin__login--wrapper">
+    <form  action= "{% url 'encounterapp:verify' slug  %}" method = "post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="error">
+          {%  if message %}
+          <p>
+            <strong class="error_message">
+            {{ message }}
+          </strong>
+          </p>
+          
+          {% endif %}
+        </div>
+  
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="hidden"
+                name="verify_token"
+               
+                
+                class="form-control"
+                value= {{slug}}
+              
+                />
+              
+            </div>
+            <div class="help_parent"><span class="help-block"></span></div>
+          </div>
+  
+  
+        <div class="submit__wrap">
+          <button type="submit" class="submit">Confirm</button>
+        </div>
+     
+    </form>
+  </div>
+</body>
+</html>
