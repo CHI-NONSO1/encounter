@@ -1,0 +1,30 @@
+<!-- messaging/templates/messaging/chat.html -->
+{% extends 'encounterapp/messaging/base.html' %}
+
+{% block content %}
+    <div class="chat-container">
+      <div class="dashbaord">
+        <a class="link__item" href="{% url 'encounterapp:dashboard' access_token %}">Dashboard</a>
+       </div>
+        <div class="chat-messages">
+            {% for message in messages %}
+                <div class="message">
+                  
+                    <span class="sender">{{ message.sender.username }}</span>
+                    <span class="timestamp">{{ message.timestamp }}</span>
+                    <p>{{ message.content }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <form id="message-form" method="POST"
+        action="{% url 'encounterapp:send_message' access_token %}">
+        {% csrf_token %}
+          <input type="text" id="message-input" name="user_id" value= {{user_id}} />
+        
+            <textarea  name="content" rows="2" cols="30" placeholder="Write your message">
+      
+            </textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+{% endblock %}

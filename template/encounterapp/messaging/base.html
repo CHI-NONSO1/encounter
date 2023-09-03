@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <title>Encounter Messaging</title>
+    {% load static %}
+    <!-- Include CSS and JavaScript files -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+    <!-- Include shared header or navigation -->
+    <header>
+        <h1>Encounter Messaging</h1>
+    </header>
+    
+    <!-- Content block that will be overridden in child templates -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Include shared footer -->
+    <footer>
+        <p>&copy; 2023 Encounter Messaging</p>
+    </footer>
+</body>
+</html>

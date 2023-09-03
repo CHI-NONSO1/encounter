@@ -1,0 +1,27 @@
+
+{% extends 'encounterapp/messaging/instant-base.html' %}
+
+{% block content %}
+
+
+<div id="chat">
+ 
+</div>
+<div class="chat_input">
+  <textarea  id="chat-message-input"  placeholder="Write your message">
+  
+  </textarea>
+      <input type="hidden" id="user__id" value= {{user_id}} />
+      <input type="hidden" id="sender__id" value= {{senderid}} />
+      <input type="hidden" id="access__token" value= {{access_token}} />
+      <input id="chat-message-submit" type="button" value="Send">
+      
+      {{access_token|json_script:"access_token" }}
+      {{user_id|json_script:"user_id" }}
+      {{senderid|json_script:"senderid" }}
+      
+ </div>
+
+        <!-- ============================ -->
+    
+{% endblock %}

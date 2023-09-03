@@ -1,0 +1,28 @@
+
+
+{% extends 'encounterapp/messaging/room-chat-base.html' %}
+
+{% block content %}
+
+
+<div id="room-chat" style="height: 90%; scroll-behavior: smooth;">
+ 
+</div>
+
+<div class="chat_input">
+  <textarea  id="chat-message-input"  placeholder="Write your message">
+  
+  </textarea>
+  <input id="group_id-input" value={{group_id}} type="hidden" ><br>
+  <input id="sender_id-input" value={{senderid}} type="hidden" ><br>
+  <input id="chat-message-submit" type="button" value="Send">
+  {{ room_name|json_script:"room-name" }}
+  {{ group_id|json_script:"group_id" }}
+  {{access_token|json_script:"access_token" }}
+  {{ senderid|json_script:"senderid" }}
+      
+ </div>
+
+        <!-- ============================ -->
+    
+{% endblock %}

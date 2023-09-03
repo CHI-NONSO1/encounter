@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <title>Encounter Messaging</title>
+    {% load static %}
+    <!-- Include CSS and JavaScript files -->
+
+    <link rel="stylesheet" href="{% static 'encounterapp/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'encounterapp/chat.css' %}">
+</head>
+<body class="page_body">
+    <div class="header_parent">
+        <div class="dashbaord">
+            <a class="link__item" href="{% url 'encounterapp:dashbaord' access_token %}">Dashbaord</a>
+           </div>
+        <h1>Encounter Messaging</h1>
+        </div>
+    <div class="chat-container">
+    <div class="left_side">
+       hello
+       
+    </div>
+   
+    <div class="main__chat_content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div class="right_side">
+       hello
+    </div>
+</div>
+    <div class="footer_parent">
+        <p>&copy; 2023 Encounter Messaging</p>
+    </div>
+
+ <script src="{% static 'encounterapp/main_roomchat.js' %}"></script> 
+</body>
+</html>
