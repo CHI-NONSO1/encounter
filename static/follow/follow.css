@@ -1,0 +1,77 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  width: 98%;
+  height: 98%;
+  background: #d5def5; 
+ 
+  margin:0 auto;
+  position: relative;
+}
+.follow__form-main{
+  width: 88%;
+  height: 80%;
+  background: #d5def5; 
+}
+.follow_form{
+  width: 42%;
+  height: 8%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: .5%;
+  border-radius: 5px;
+}
+
+.follow_wrapper{
+  width: 42%;
+  height: 8%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: .5%;
+  border-radius: 5px;
+  margin: 2% auto;
+}
+
+.connect__form{
+  width: 32%;
+  height: 8%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: #28e428;
+  padding: .5%;
+  border-radius: 5px;
+  margin: 2% auto;
+  animation: pulsate 3s  infinite alternate;
+}
+
+@keyframes pulsate {
+  10%{
+    background: #fff;
+  }
+  20%{
+    background: #28e428;
+  }
+  40%{
+    background: #fff;
+  }
+  60%{
+    background: #28e428;
+  }
+  80%{
+    background: #fff;
+  }
+  100%{
+    background: #28e428;
+  }
+}
