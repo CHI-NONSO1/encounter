@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <title>Create Room</title>
+  
+    <link rel="stylesheet" href="{% static 'encounterapp/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'user/group-room.css' %}"> 
+    
+</head>
+<body>
+    <h1>Create Room</h1>
+
+    <!-- Video upload form -->
+    
+    <form  action= "{% url 'encounterapp:create-room' group_id access_token  %}" method = "post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="error">
+            {%  if error %}
+            <p>
+              <strong class="error_message">
+              {{ error }}
+            </strong>
+            </p>
+        
+            {% endif %}
+          </div>
+
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="text"
+                id="room-name"
+                name="room-name"
+                placeholder="Room Name"
+                class="form-control"
+                
+                />
+              <label for="room-name" class="labText">Room Name</label>
+            </div>
+            <div class="help_parent"><span class="help-block"></span></div>
+          </div>
+  
+  
+          <div class="form-group-parent2">
+              <textarea  name="description" rows="2" cols="30" placeholder="Describe your room here">
+      
+              </textarea>
+          </div>
+         
+          <div class="form-group-parent-file">
+            <div class="fileBtn_parent">
+              <input  type="file" name='room-image' id="imgprev" /> 
+              </div>
+          
+              <div class="img_parent">
+              <img
+              class="img_content"
+              alt='avatarimg' 
+              thumbnail
+              src="URL.createObjectURL(imageprev)"
+              id="profileDisplay" />
+              
+              </div>
+            </div>
+        <button type="submit">Create</button>
+    </form>
+    <script src="{% static 'encounterapp/infinite_scroll.js' %}"></script>
+</body>
+</html>

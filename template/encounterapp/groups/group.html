@@ -1,0 +1,95 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'follow/follow.css' %}"> 
+</head>
+<body>
+  <div class="dashbaord">
+    <a class="link__item" href="{% url 'encounterapp:dashbaord' access_token %}">Dashbaord</a>
+   </div>
+   <div  class="follow__form-main">
+   {% for notify in notificate %}
+   <div class="connect__form">    
+    <div  >
+    <img
+    width="40px"
+    height="40px"
+    alt="user-img"
+    src="/media/{{notify.sender.image}}"
+    class="logo__img"
+  />
+  {{notify.sender.firstname}} {{notify.sender.lastname}} is following you
+</div>
+<div>
+<form
+method="POST"
+action="{% url 'encounterapp:follow' access_token %}"
+>
+{% csrf_token %}
+<input type="hidden" name="user_id" value="{{notify.sender.id}}" />
+<div class="connect_btn">
+  <button type="submit" class="connect-button">Connect</button>
+</div>
+</form>
+</div>
+  </div>
+   {%endfor%}
+
+   {%if groups %}
+  {%for group in groups %}
+ 
+  {% if memba %}
+  <div class="follow_wrapper">
+    <div class="follow_form">
+      <img
+      width="40px"
+      height="40px"
+      alt="user-img"
+      src="/media/{{group.group_image}}"
+      class="logo__img"
+    />
+    <div>{{group.group_name}} </div>
+  </div>
+      <div class="group_btn">
+        <a class="post__link" href="{% url 'encounterapp:group-home' group.id access_token %}"> Enter Group</a>
+    </div>
+    </div>
+    {%else%}
+    <div class="follow_wrapper">
+      <div class="follow_form">
+        <img
+        width="40px"
+        height="40px"
+        alt="user-img"
+        src="/media/{{group.group_image}}"
+        class="logo__img"
+      />
+      <div>{{group.group_name}} </div>
+    </div>
+        <div class="group_btn">
+          <a class="post__link" href="{% url 'encounterapp:join-group' group.id access_token %}"> Join Group</a>
+      </div>
+      </div>
+  {%endif%}
+ 
+    
+    {%endfor%}
+    {%else%}
+    <div>No More Suggestions</div>
+    {%endif%}
+    <div class="create_group-ntn">
+      <a class="post__link" href="{% url 'encounterapp:create-group' access_token %}">Create A Group</a>
+  </div>
+
+    <!--  -->
+    
+      </div>
+    
+</body>
+</html>

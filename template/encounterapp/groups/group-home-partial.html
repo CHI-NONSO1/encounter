@@ -1,0 +1,279 @@
+
+    <!-- Post -->
+    {% for post in posts %}
+    <!-- =========================== -->
+    <!-- <div id="video-container"> -->
+      <div class="post_details-wrap">
+        <div class="author_details"> 
+          <div class="author_image_wrap">
+            <img
+            width="60px"
+            height="60px"
+            alt="author-img"
+            style="border-radius: 50%;"
+            src="/media/{{post.user.image}}"
+            class="logo__img"
+          />
+          </div>
+          <div>
+            <div>By {{post.user.firstname}}{{" "}}{{post.user.lastname}}</div>
+            <div>On {{post.timestamp}}</div>
+          </div>
+         
+          
+        </div>
+        <div class='post_content'>
+          
+        <div><h2>{{post.title}}</h2></div>
+        {% if post.image %}
+        <div class="post_image_wrap">
+          <img
+          width="200px"
+          height="200px"
+          alt="post-img"
+          style="border-radius: 20%;"
+          src="/media/{{post.image}}"
+          class="logo__img"
+        />
+        </div>
+        {% endif %}
+        {% if post.video %}
+        <video id="video" class="video-player" preload="auto" >
+          <source id="videosrc" src="{{ post.video.url }}" type="video/mp4" />
+          
+          <track
+            label="English"
+            kind="captions"
+            srclang="en"
+            src="{{ post.video.url }}"
+            default
+          />
+          Your browser does not support the video tag.
+        </video>
+        {% endif %}
+      
+      <div class="post_detail-container">
+        
+      <div class="post_content_container" >{{post.content}}</div>
+      
+      
+      </div>
+      </div>
+      <div class="like-comment-share-wrap">
+       
+          
+          <form
+            method="POST"
+            action=""
+            class="like_heart"
+          >
+            {% csrf_token %}
+            <input type="hidden" name="user" value="{{userID}}" />
+            <input type="hidden" name="post_id" value="{{post.id}}" />
+              <span class="likes-count" data-likepost-id="{{post.id}}">{{ post.like }}</span>
+              <button type="submit" class="like-button">&#x1F49C;</button>
+            
+          </form>
+       
+        <button class="show_hide-commentbox" data-item-id="{{post.id}}">{{post.comments.count}} {{""}}Comments</button>
+        <div class="share_post">Share</div>
+        
+      </div>
+      <!-- Post Reactions -->
+      
+      <div class="reaction-card">
+        <div id="commentForm" style="display: none;" data-item-id="{{post.id}}"  class="commentbox">
+          <!-- ===============Comment Start================= -->
+            
+        <div class="comment_reply" data-id="{{post.id}}">
+          <!-- Comments -->
+          {% for comment in post.comments.all %}
+          <div class="comment_items-replies-wrap" data-comment-id="{{comment.id}}">
+          <div class="comment_items">
+            <div class="name-img">
+              <img
+                width="30px"
+                height="30px"
+                style="border-radius: 50%;"
+                alt="user-img"
+                src="/media/{{img}}"
+                class="logo__img"
+              />
+             
+              <p>{{comment.user.firstname}} {{comment.user.lastname}}</p>
+            </div>
+      
+              <div class="comment_like_heart">
+                <p>{{comment.content}}</p>
+               
+              <form
+              class="form_comment-like"
+                method="POST"
+                action=""
+              >
+                {% csrf_token %}
+                <input type="hidden" name="user" value="{{userID}}" />
+                <input type="hidden" name="comment_id" value="{{comment.id}}" />
+                <div class="like-comment">
+                  <span class="comment_likes-count-comment">{{ comment.comment_likes }}</span>
+                  <button type="submit" class="like-button-comment">&#x1F49C;</button>
+                </div>
+              </form>
+            </div>
+            <div>
+              <form method="POST" action="">
+              {% csrf_token %}
+              <input type="hidden" name="user" value="{{userID}}" />
+              <input type="hidden" name="comment_id" value="{{comment.id}}" />
+              <button type="submit" class="delete_comment">Delete</button>
+            </form>
+            </div>
+             <!-- ================Replies=================== -->
+            <div>
+              
+              <form
+                method="POST"
+                action=""
+              >
+                {% csrf_token %}
+            
+               
+        <textarea name="reply" class="comment-main-reply" placeholder="Post a Reply" rows="1" cols="25"></textarea>
+                <input type="hidden" name="user" value='{{userID}}' />
+                <input type="hidden" name="post_id" value='{{post.id}}' />
+                <input type="hidden" name="firstname" value={{firstname}} />
+                <input type="hidden" name="lastname" value={{lastname}} />
+                <input type="hidden" name="image" value={{img}} />
+                <input type="hidden" name="parent_id" value='{{comment.id}}'  />
+            
+                <button type="submit" class="reply__comments">Reply</button>
+              </form>
+            </div>
+           
+          
+          </div>
+         
+      
+        <!--  -->
+          <div data-reply-id="{{comment.id}}">
+            <!-- Replies -->
+            {% for reply in comment.replies.all %}
+            <div class="reply-reply" data-deleterepli-id="{{reply.id}}">
+              <div>
+                <img
+                  width="20px"
+                  height="20px"
+                  alt="user-img"
+                  style="border-radius: 50%;"
+                  src="/media/{{img}}"
+                  class="logo__img"
+                />
+                {{ reply.user.firstname }} {{reply.user.lastname}}
+              </div>
+              <div class="reply_like_heart">
+                {{reply.reply_content}}
+             
+                <form
+                  method="POST"
+                  action=""
+                >
+                  {% csrf_token %}
+                  <input type="hidden" name="user" value="{{userID}}" />
+                  <input type="hidden" name="reply_id" value="{{reply.id}}" />
+                  <div class="like-reply">
+                    <span class="reply_likes-count">{{ reply.reply_likes }}</span>
+                    <button type="submit" class="like-button-reply">&#x1F49C;</button>
+                  </div>
+                </form>
+              </div>
+              <div>
+                <form method="POST" action="">
+                {% csrf_token %}
+                <input type="hidden" name="user" value="{{userID}}" />
+                <input type="hidden" name="reply_id" value="{{reply.id}}" />
+                <button type="submit" class="delete_reply">Delete</button>
+              </form>
+              </div>
+              <!--  -->
+           
+            <form
+            method="POST"
+            action=""
+          >
+            {% csrf_token %}
+        
+           
+            <textarea name="reply" class="comment-main-reply" placeholder="Post a Reply" rows="1" cols="25"></textarea>
+            <input type="hidden" name="user" value="{{userID}}" />
+            <input type="hidden" name="firstname" value={{firstname}} />
+            <input type="hidden" name="lastname" value={{lastname}} />
+            <input type="hidden" name="image" value={{img}} />
+            <input type="hidden" name="post_id" value="{{post.id}}" />
+            <input type="hidden" name="parent_id" value="{{reply.id}}" />
+            <input type="hidden" name="comment_id" value="{{comment.id}}" />
+            
+        
+            <button type="submit" class="Reply_reply">Reply-reply</button>
+          </form>
+          <!--  -->
+          
+            </div>
+            {% endfor %}
+          </div>
+          </div>
+          <!-- ================================= -->
+          {% endfor %}
+        </div>
+          <!-- ============Comment End==================== -->
+          <div class="comment__box-input">
+            <div>
+            <img
+              width="40px"
+              height="40px"
+              style="border-radius: 50%;"
+              alt="user-img"
+              src="/media/{{img}}"
+              class="logo__img"
+            />
+          </div>
+         
+        <form
+        class="form_comment"
+          method="POST"
+          action=""
+        >
+          {% csrf_token %}
+          
+          <textarea class="comment-text"  name="comment" rows="2" cols="30" placeholder="Post a comment"></textarea>
+          <input type="hidden" name="user" value={{userID}} />
+          <input type="hidden" name="firstname" value={{firstname}} />
+          <input type="hidden" name="lastname" value={{lastname}} />
+          <input type="hidden" name="image" value={{img}} />
+          <input type="hidden" name="post_id" value={{post.id}} />
+          <button class="addcomment" type="submit">Comment</button>
+        </form>
+      </div>
+      
+      
+      </div>
+      <!-- ================ -->
+      
+      
+      </div>
+      <!--  -->
+      </div>
+    {% endfor %}
+    <!-- endpost -->
+  
+    <!-- ==================== -->
+    
+    {% if page_obj.has_next %}
+    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+    {% endif %}
+    <div class="d-flex justify-content-center" style="display:none;">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+     </div> 
+    
+    

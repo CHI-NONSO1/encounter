@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    {%for group in groups%}
+    <title>{{group.group_name}} Group</title>
+    {%endfor%}
+    <link rel="stylesheet" href="{% static 'encounterapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'encounterapp/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'encounterapp/search.css' %}">
+</head>
+<body>
+  <div  class="header-main">
+   
+
+  <div class="post_ntn">
+    <a class="post__link" href="{% url 'encounterapp:post' access_token %}">Post</a>
+</div>
+  
+     <div class="follow">
+      <a class="link__item" href="{% url 'encounterapp:follow' access_token %}">Connect</a>
+     </div>
+     {%if notificate %}
+     <div class="notification_count">{{notificate.count}}</div>
+     {%endif%}
+     <div class="logout">
+      <a class="link__item" href="{% url 'encounterapp:logout' access_token %}">Logout</a>
+     </div>
+     <div class="logout">
+      <a class="link__item" href="{% url 'encounterapp:home' access_token %}">Home</a>
+     </div>
+     <div class="dashbaord">
+      <a class="link__item" href="{% url 'encounterapp:dashbaord' access_token %}">Dashbaord</a>
+     </div>
+     {%for group in groups%}
+     <div class="group_btn">
+      <a class="post__link" href="{% url 'encounterapp:leave-group' group.id access_token %}"> Leave Group</a>
+  </div>
+     {% endfor%}
+     <div class="notifications">
+      <a class="link__noti" href="{% url 'encounterapp:notifications' access_token %}">Notifications</a>
+   </div>
+   {%if notificate %}
+   <div class="notifications_count">{{notificate.count}}</div>
+   {%endif%}
+   <div class="chat">
+    <a class="link__item" href="{% url 'encounterapp:interact' access_token %}">Interactions</a>
+   </div>
+
+     <div>
+      <button class="theme-picker">Theme</button>
+      </div> 
+      <div>
+        {{follow}} followings
+      {{encounters}} followers
+      </div>
+     
+  </div> 
+  <div id="home_view-left" class="home_view-left">
+   
+    <div class="trinding_video">
+      <div class="trending_heading-parent">
+        <h2 class="trending_heading" >Group Members</h2>
+      </div>
+     </div>
+     {% for member in members%}
+     <p>{{member.firstname}} {{member.lastname}}</p>
+     {%endfor%}
+    
+  </div> 
+   
+  <div class="main_view">  
+    <div class="post_main_view">
+      <div class="paid_video">
+<!-- Horizontal Slider -->
+<div class="slider">
+  {% for video in sponsored_video %}
+  <div  class="slider__slide">
+    
+      <video id="video_item" class="sponsored-video" controls preload="auto" data-created-at="{{ video.created_at }}">
+          <source src="{{ video.Video.url }}" type="video/mp4" />
+          <track
+            label="English"
+            kind="captions"
+            srclang="en"
+            src="{{ video.Video.url }}"
+            default
+          />
+          Your browser does not support the video tag.
+        </video>
+  </div>
+  {% endfor %}
+  <!-- <div class="left-arrow"></div>
+  <div class="right-arrow"></div> -->
+  </div>
+<!--  -->
+      </div>
+        {% include 'encounterapp/groups/group-home-partial.html' with posts=posts %}
+    </div>
+  
+</div>
+<!--  -->
+<div class="home_viewright">
+  <div class="latest_video-parent" >
+    <h2 class="latest_video">Chat Room</h2>
+  </div>
+ 
+  <div class="just_explaind_video">
+    {% if rooms %}
+    {% for room in rooms%}
+    <div class="rooms">
+      <img
+      width="40px"
+      height="40px"
+      alt="room-img"
+      src="/media/{{room.room_image}}"
+      class="logo__img"
+    />
+    <div>{{room.room_name}}</div>
+    {%for group in groups%}
+    <div class="chat">
+      <a class="link__item" href="{% url 'encounterapp:room-chat' room.room_name group.id access_token %}">Enter ChatRoom</a>
+     </div>
+   {%endfor%}
+  </div>
+    {% endfor %}
+    {% endif%}
+    <div class="create_room">
+      {%for group in groups%}
+      <a class="room__link" href="{% url 'encounterapp:create-room' group.id access_token %}">Create A ChatRoom</a>
+      {%endfor%}
+  </div>
+   </div>
+</div> 
+  
+  <script src="{% static 'encounterapp/infinite_scroll.js' %}"></script>  
+
+  <script src="{% static 'encounterapp/js/jquery-2.2.4.min.js'%}"></script>
+  <script src="{% static 'encounterapp/js/jquery.waypoints.min.js'%}"></script>
+  <script src="{% static 'encounterapp/js/infinite.min.js'%}"></script>
+  <script>
+  var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      handler: function(direction) {
+
+  },
+  offset: 'bottom-in-view',
+
+  onBeforePageLoad: function () {
+  $('.spinner-border').show();
+  },
+  onAfterPageLoad: function () {
+  $('.spinner-border').hide();
+  }
+
+  });
+
+  </script>
+  </body>
+</body>
+</html>
+
+
+
+
