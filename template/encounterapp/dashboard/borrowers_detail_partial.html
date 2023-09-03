@@ -1,0 +1,33 @@
+{% extends 'encounterapp/dashboard/borrowers_detail_base.html' %}
+
+{% block content %}
+
+<div class="user_details-wrap">
+  <div class="image_wrap">
+    <img
+    width="80px"
+    height="80px"
+    alt="user-img"
+    style="border-radius: 20%;"
+    src="/media/{{image}}"
+    class="logo__img"
+  />
+  </div>
+
+<div class="user_detail-container">
+  <div>{{firstname}} {{lastname}}</div>
+<div>Interest Rate: {{rate}}</div>
+<div>Duration: {{duration}}</div>
+
+<div class="chat">
+  <a class="link__item" href="{% url 'encounterapp:instant-chat' userid|add:borrowerid borrowerid access_token %}">Chat</a>
+ </div>
+
+ <div class="invest">
+  <a class="link__item" href="{% url 'encounterapp:invest' borrowerid access_token %}">Invest</a>
+ </div>
+
+</div>
+</div>
+
+{% endblock %}

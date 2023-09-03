@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <title>Find Borrowers</title>
+    <link rel="stylesheet" href="{% static 'encounterapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'encounterapp/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'encounterapp/search.css' %}">
+</head>
+<body>
+  <div  class="header-main">
+    {%if notificate %}
+    <div class="notification_count">{{notificate.count}}</div>
+    {%endif%}
+     <div class="follow">
+        <a class="link__connect" href="{% url 'encounterapp:follow' access_token %}">Connect</a>
+     </div>
+
+     <div class="logout">
+      <a class="link__item" href="{% url 'encounterapp:logout' access_token %}">Logout</a>
+     </div>
+     <div class="dashboard">
+      <a class="link__item" href="{% url 'encounterapp:dashboard' access_token %}">Dashboard</a>
+     </div>
+     
+      <form
+       method="POST" 
+       action="{% url 'encounterapp:search' access_token %}" 
+       class="search_bar">
+      {% csrf_token %}
+      <input type="text" name="search_box" placeholder="Search here . . ." class="search_input" value="" />
+      <input type="hidden" name="user_id" value="{{userID}}" />
+      <button type="submit" class="search_btn">Search</button>
+    </form>
+    
+     <div class="notifications">
+      <a class="link__noti" href="{% url 'encounterapp:notifications' access_token %}">Notifications</a>
+   </div>
+   {%if notificate %}
+   <div class="notifications_count">{{notificate.count}}</div>
+   {%endif%}
+     <div>
+      <button class="theme-picker">Theme</button>
+      </div> 
+   
+      <div>
+        {{follow}} followings
+      {{encounters}} followers
+      </div>
+      
+    
+      
+  </div> 
+  <div id="home_view-left" class="home_view-left">
+   
+    <div class="trinding_video">
+      <div class="trending_heading-parent">
+        <h2 class="trending_heading" >Trending Post</h2>
+      </div>
+      {% for post in posts %}
+      {%if post.like >= 1 %}
+      <div class="trinding_video-item">
+        <div><h2>{{ post.title }}</h2></div>
+        {% if post.video %}
+        <video id="video" class="video-player" preload="auto" >
+          <source id="videosrc" src="{{ post.video.url }}" type="video/mp4" />
+          
+          <track
+            label="English"
+            kind="captions"
+            srclang="en"
+            src="{{ post.video.url }}"
+            default
+          />
+          Your browser does not support the video tag.
+        </video>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% endfor %}
+     </div>
+   
+  </div> 
+
+
+  <div class="main_view">  
+    <div class="post_main_view">
+      <div class="paid_video">
+<!-- Horizontal Slider -->
+<div class="slider">
+  {% for post in is_sponsored %}
+  <div  class="slider__slide">
+    {% if post.video %}
+      <video id="video_item" class="sponsored-video" preload="auto" data-created-at="{{ post.created_at }}">
+          <source src="{{ post.video.url }}" type="video/mp4" />
+          <track
+            label="English"
+            kind="captions"
+            srclang="en"
+            src="{{ post.video.url }}"
+            default
+          />
+          Your browser does not support the video tag.
+        </video>
+        {% endif %}
+  </div>
+  {% endfor %}
+  
+  </div>
+<!--  -->
+      </div>
+      <div>
+        {% block content %}
+          {% endblock %}
+        </div>
+    </div>
+  
+</div>
+
+<div class="home_viewright">
+  <div class="latest_post-parent" >
+    <h2 class="latest_video">Latest Post</h2>
+  </div>
+   
+<div class="just_explaind_video">
+  {% for post in justexplained %}
+  <div class="just_posted-item">
+    <div><h2>{{ post.title }}</h2></div>
+    {% if post.video %}
+    <video id="video" class="video-player" preload="auto" >
+      <source id="videosrc" src="{{ post.video.url }}" type="video/mp4" />
+      
+      <track
+        label="English"
+        kind="captions"
+        srclang="en"
+        src="{{ post.video.url }}"
+        default
+      />
+      Your browser does not support the video tag.
+    </video>
+    {% endif %}
+  </div>
+  {% endfor %}
+ </div>
+</div>
+  
+  <script src="{% static 'encounterapp/infinite_scroll.js' %}"></script>  
+
+  </body>
+</body>
+</html>
+
+
+
+

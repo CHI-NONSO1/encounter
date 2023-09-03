@@ -1,0 +1,62 @@
+{{access_token|json_script:"access_token" }}
+
+<div>{{firstname}}{{""}}{{lastname}}</div>
+{% if target_investment %}
+<div>Last Payment Date: {{last_payment_date}}</div>
+{% endif %}
+<div>Working Account: {{working_account}}</div>
+{% if target_investment %}
+<div>Target Investment: {{target_investment}}</div>
+{% endif %} {% if reserved_account %}
+<div>Reserved Account: {{reserved_account}}</div>
+{% endif %}
+<div></div>
+Duration: {{duration}} days
+<div>Interest Rate: {{rate}}</div>
+
+{% if reserved_account %}
+
+{% if interest_payable == 0 %}
+<div>You have no  Investor yet
+  <a class="link__item" href="{% url 'encounterapp:find_investors' access_token %}">Find Investors</a>
+</div>
+{% endif %}
+
+{% if interest_payable != 0 %}
+{% if next_payment_date != None %}
+<div>
+  Next Payment Date : {{next_payment_date}}
+</div>
+{% endif %}
+
+<div>You have: {{investors.count}} Investor</div>
+
+
+<div>
+  {% if next_due_date == True %}
+  Interest Payable for the Month: N{{interest_payable}}
+  <div>
+    <form
+      action="{% url 'encounterapp:transfer_interest' access_token  %}"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+      <div class="error">
+        {% if error %}
+        <p>
+          <strong class="error_message"> {{ error }} </strong>
+        </p>
+
+        {% endif %}
+      </div>
+      <input type="hidden" name="amount" value="{{payment}}" />
+      <button type="submit">Pay</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+{% endif %}
+
+{% endif %}

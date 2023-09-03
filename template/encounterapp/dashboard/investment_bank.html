@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load custom_tags %}
+    {% load static %}
+    
+    
+    <title>Investment Banking</title>
+    <!-- Include necessary CSS and JavaScript files -->
+    <!-- Example: Bootstrap and jQuery -->
+    <link rel="stylesheet" href="{% static 'encounterapp/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'user/user-post.css' %}"> 
+    
+</head>
+<body>
+    <h1>Tell The World</h1>
+
+    <!-- Video upload form -->
+    
+    <form  action= "{% url 'encounterapp:investment_banking' access_token  %}" method = "post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="error">
+            {%  if error %}
+            <p>
+              <strong class="error_message">
+              {{ error }}
+            </strong>
+            </p>
+        
+            {% endif %}
+          </div>
+
+          <div >
+            <select id="select--option" name="investment_type">
+              <option  value="">ChooseType</option>
+              <option value="lender">Investor</option>
+              <option value="borrower">Borrower</option>
+            </select>
+          </div>
+         
+          <div id="target_investment" class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="number"
+                id="target"
+                name="target_amount"
+                placeholder="Target Investment"
+                class="form-control"
+                
+                />
+              <label for="target" class="labText">Target Investment</label>
+            </div>
+          </div>
+
+          <div id="investment_amount" class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="Investment Amount"
+                class="form-control"
+                
+                />
+              <label for="amount" class="labText">Investment Amount</label>
+            </div>
+          </div>
+          
+
+          <div class="form-group-parent2">
+            <div class="input_parent">
+              <input
+                type="number"
+                id="rate"
+                name="rate"
+                placeholder="Interst Rate"
+                class="form-control"
+                
+                />
+              <label for="rate" class="labText">Interst Rate</label>
+            </div>
+          </div>
+
+
+
+          <div class="form-group-parent2">
+            <select id="rate" name="duration">
+              {% generate_values as values %}
+              {% for value in values %}
+                <option value="{{ value }}">{{ value }}</option>
+              {% endfor %}
+            
+            </select>
+            <label for="rate" class="labText">Duration</label>
+          </div>
+  
+
+        <button type="submit">Submit</button>
+    </form>
+    <script src="{% static 'encounterapp/investment.js' %}"></script>
+    
+</body>
+</html>

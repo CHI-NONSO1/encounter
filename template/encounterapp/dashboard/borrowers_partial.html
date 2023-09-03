@@ -1,0 +1,37 @@
+
+{% extends 'encounterapp/dashboard/borrowers_base.html' %}
+
+{% block content %}
+
+{% for user in borrowers %}
+<div class="user-wrap">
+  <img
+  width="40px"
+  height="40px"
+  alt="post-img"
+  style="border-radius: 20%;"
+  src="/media/{{user.image}}"
+  class="logo__img"
+/>
+<div class="user-container">
+  <div >
+    {{user.firstname}}
+   {{user.lastname}}
+  </div>
+<div style="display: flex; flex-direction: column;">
+  <span>Interest Rate: {{user.rate}}%/Month</span>  
+  <span>Duration:{{user.duration}} {{""}}days</span>
+  
+
+</div>
+
+<div class="details">
+  <a class="link__details" href="{% url 'encounterapp:borrower_detail' user.id access_token %}">Expand</a>
+</div>
+</div>
+</div>
+{% endfor %}
+
+
+
+ {% endblock %}

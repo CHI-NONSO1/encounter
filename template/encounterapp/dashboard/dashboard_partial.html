@@ -1,0 +1,247 @@
+{{access_token|json_script:"access_token" }}
+{{userID|json_script:"userID" }}
+<div class="post_form">
+  <form  action= "{% url 'encounterapp:post' access_token  %}" method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="error">
+        {%  if error %}
+        <p>
+          <strong class="error_message">
+          {{ error }}
+        </strong>
+        </p>
+    
+        {% endif %}
+      </div>
+  <!-- ----------------------------------------------------- -->
+<div style="display: flex; align-items: center;" class="make_post">
+  <div class="user_image_parent" >
+  <img
+  alt="author-img"
+  src="/media/{{img}}"
+  class="logo__img"
+/>
+</div>
+<div class="container">
+  <input type="text" style="width: 90%; outline: none; border: none; margin-bottom: .6%; display: none;" name="hashtags" placeholder="You can enter hashtags here separated by commas" id="hashtag_iput">
+<div class="textarea-container">
+
+
+<textarea id="textArea" name="content"  rows="2" cols="60" placeholder="Share Your Idea"></textarea>
+<button class="post_btn" id="sendButton" disabled>Send</button>
+</div>
+</div>
+
+<!-- --------------------------------------------------------------------- -->
+</div>
+<div class="show_hide_group">
+
+<div id="select_groups"></div>
+
+  <label for="video-file-input" class="custom-video-upload">
+    <input id="video-file-input" type="file" name='video'>
+  </label>
+
+  <label for="image-file-input" class="custom-image-upload">
+    <input id="image-file-input" type="file" name='image'>
+  </label>
+    
+</div>
+<div class="select--option" style="display: none;">
+  {% if groups%}
+  {%for group in groups%}
+  
+  <input type="checkbox" class="grouppost" id="group_post" name="groups"  value="{{group.group_name}}" >{{group.group_name}} 
+    {%endfor%}
+    
+  {%endif%}
+</div>
+<div class="img_parent" style="display: none;">
+  <img
+  class="img_content"
+  id="imagePreview" 
+  src="" 
+  alt="Image Preview"
+ 
+>
+  </div>
+  <div class="video_prev_parent" style="display: none;">
+    <video id="video" class="video-player" preload="auto" >
+      <source id="videosrc" src="" type="video/mp4" />
+      
+      <track
+        label="English"
+        kind="captions"
+        srclang="en"
+        src=""
+        default
+      />
+      Your browser does not support the video tag.
+    </video>
+    </div>
+  </form>
+</div>
+{% for post in posts %}
+<!-- =========================== -->
+<div class="post_details-wrap">
+  <div class="author_details"> 
+    <div class="author_image_wrap">
+      <img
+     
+      alt="author-img"
+      style="border-radius: 50%;"
+      src="/media/{{post.user.image}}"
+      class="logo__img"
+    />
+    </div>
+    <div>
+      <div>You just posted</div>
+      <div>On {{post.timestamp}}</div>
+    </div>
+   
+    
+  </div>
+<div>
+  
+  <div class="logout">
+    <a class="link__item" href="{% url 'encounterapp:delete' post.id access_token %}">Delete</a>
+   </div>
+{% if post.is_sponsored == False %}
+<div class="logout">
+  <a class="link__item" href="{% url 'encounterapp:sponsor_post' post.id access_token %}">Sponsor Post</a>
+ </div>
+{%endif%}
+   
+</div>
+
+<div class='post_content'>
+  {% if post.hashtags %}
+  {% for hashtag in post.hashtags.all %}
+  <a href="{% url 'encounterapp:hashtag_posts' hashtag.name access_token %}">#{{ hashtag.name }}</a>
+  {% endfor %}
+  {% endif %}
+  {% if post.image %}
+  <div class="post_image_wrap">
+    <img
+  
+    alt="post-img"
+   
+    src="/media/{{post.image}}"
+    class="post__img"
+  />
+  </div>
+  {% endif %}
+  {% if post.video %}
+  <video id="video" class="video-player" preload="auto" >
+    <source id="videosrc" src="{{ post.video.url }}" type="video/mp4" />
+    
+    <track
+      label="English"
+      kind="captions"
+      srclang="en"
+      src="{{ post.video.url }}"
+      default
+    />
+    Your browser does not support the video tag.
+  </video>
+  {% endif %}
+
+<div  class="post_detail-container">
+  
+<div   class="post_content_container">
+  <p class="shorten_text" data-showmore-id="{{post.id}}">{{post.content}}</p>
+  <button class="show_more_btn" data-show-id="{{post.id}}">Show more</button>
+</div>
+
+
+</div>
+</div>
+<div class="like-comment-share">
+  <div class="reaction_button">
+  <span data-likepost-id="{{post.id}}">{{ post.total_likes }}</span>
+  <button type="submit" data-user-id="{{userID}}" data-post-id="{{post.id}}" class="like-button">&#x1F49C;</button>
+  </div>
+
+
+
+  <div class="reaction_button">
+    <span data-item-id="{{post.id}}" >{{post.comments.count}}</span>
+<button type="submit" class="show_hide-commentbox" data-user-id="{{userID}}" data-item-id="{{post.id}}">Comments</button>
+</div>
+
+<div class="reaction_button">
+  <span data-item-id="{{post.id}}" >{{post.total_shared}}</span>
+<button type="submit" class="share_post" data-user-id="{{userID}}" data-item-id="{{post.id}}">Share</button>
+</div>
+ 
+</div>
+
+<div class="reaction-card">
+  <div id="commentForm" style="display: none;" data-item-id="{{post.id}}"  class="commentbox">
+    <!-- ===============Comment Start================= -->
+      
+  <div class="comment_reply" data-id="{{post.id}}">
+    <!-- Comments -->
+    {% for comment in post.comments.all %}
+    {% if comment.parent == None %}
+
+
+   
+ 
+  
+  
+     <!-- ==============Removed From HERE=================== -->
+    {% endif %}
+   
+    {% endfor %}
+  </div>
+    <!-- ============Comment End==================== -->
+    <div class="comment__box-input">
+      <div>
+      <img
+        width="40px"
+        height="40px"
+        style="border-radius: 50%;"
+        alt="user-img"
+        src="/media/{{img}}"
+        class="logo__img"
+      />
+    </div>
+   
+  <form
+  class="form_comment"
+    method="POST"
+    action=""
+  >
+    {% csrf_token %}
+    
+    <textarea class="comment-text"  name="comment" rows="2" cols="30" placeholder="Post a comment"></textarea>
+    <input type="hidden" name="user" value={{userID}} />
+    <input type="hidden" name="firstname" value={{firstname}} />
+    <input type="hidden" name="lastname" value={{lastname}} />
+    <input type="hidden" name="image" value={{img}} />
+    <input type="hidden" name="post_id" value={{post.id}} />
+    <button class="addcomment" type="submit">Comment</button>
+  </form>
+</div>
+
+
+</div>
+<!-- ================ -->
+
+
+</div>
+
+</div>
+{% endfor %}
+<!-- ==================== -->
+
+{% if page_obj.has_next %}
+<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+{% endif %}
+<div class="d-flex justify-content-center" style="display:none;">
+    <div  class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+ </div> 
+
